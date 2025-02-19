@@ -81,7 +81,7 @@ export default function UserDashboard() {
           Available Book List
         </h1>
         <Table className="shadow-xl rounded-lg overflow-hidden border border-gray-200">
-          <TableHeader className="bg-gray-200">
+          <TableHeader className="bg-[#EDE0D4]">
             <TableRow>
               <TableHead className="w-[150px] text-gray-700">Name</TableHead>
               <TableHead className="text-gray-700">Genre</TableHead>
@@ -102,7 +102,7 @@ export default function UserDashboard() {
                   {book.name}
                 </TableCell>
                 <TableCell>
-                  <Badge className="px-2 py-1 text-sm">{book.genre}</Badge>
+                  <Badge className="px-2 py-1 text-sm bg-[#9c5512]">{book.genre}</Badge>
                 </TableCell>
                 <TableCell className="text-gray-700">{book.author}</TableCell>
                 <TableCell className="text-gray-800">
