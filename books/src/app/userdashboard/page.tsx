@@ -59,6 +59,15 @@ const books: Book[] = [
     year: 2015,
     price: 450,
   },
+  {
+    id: "5",
+    name: "Social Book",
+    genre: "Education",
+    description: "they are great",
+    author: "Gopali",
+    year: 2015,
+    price: 450,
+  },
 ];
 
 export default function UserDashboard() {
