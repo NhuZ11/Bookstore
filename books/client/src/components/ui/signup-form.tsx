@@ -1,5 +1,6 @@
 "use client"
 import { useState } from "react";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -145,6 +146,7 @@ export function SignupForm({
                 <Input
                   id="phone"
                   type="number"
+                  min="0"
                   placeholder="Enter Your Phone Number"
                   value={formData.phone}
                   onChange={handleChange}
@@ -199,9 +201,9 @@ export function SignupForm({
             </div>
             <div className="mt-4 text-center text-sm text-[#4A4A4A]">
               Already have an account?{" "}
-              <a href="http://localhost:3000" className="underline underline-offset-4 text-[#8B5E3C]">
+              <Link href="/" className="underline underline-offset-4 text-[#8B5E3C]">
                 Login
-              </a>
+              </Link>
             </div>
           </form>
         </CardContent>
