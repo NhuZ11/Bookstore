@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -11,14 +11,23 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { login } from "@/app/utils/authService";
+import { useRouter } from 'next/router';
+import Link from "next/link";
+
+interface UserData {
+  username: string;
+  email: string;
+  password: string;
+}
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
-  // State for form fields
-  const [formData, setFormData] = useState({ email: "", password: "" });
-  const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
+  const [formData, setFormData] = useState({ username: "", password: "" });
+  const [errors, setErrors] = useState<{ username?: string; password?: string }>({});
+  // const router = useRouter(); // Use the router for redirection
 
   // Email validation function
   const validateEmail = (email: string) => {
@@ -35,17 +44,17 @@ export function LoginForm({
   };
 
   // Handle form submission
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const validationErrors: { email?: string; password?: string } = {};
 
     // Email Validation
-    if (!formData.email.trim()) {
-      validationErrors.email = "Email is required.";
-    } else if (!validateEmail(formData.email)) {
-      validationErrors.email = "Enter a valid email.";
-    }
+    // if (!formData.email.trim()) {
+    //   validationErrors.email = "Email is required.";
+    // } else if (!validateEmail(formData.email)) {
+    //   validationErrors.email = "Enter a valid email.";
+    // }
 
     // Password Validation
     if (!formData.password.trim()) {
@@ -60,8 +69,17 @@ export function LoginForm({
       return;
     }
 
-    // If validation passes
-    alert("Login Successful!"); 
+    try {
+      // Call the login function from the auth service
+      await login(formData);
+      window.location.href = '/userdashboard';
+
+      // On successful login, redirect to the dashboard
+      // router.push('/dashboard');
+    } catch (err) {
+      console.error('Invalid username or password');
+      alert("Login failed, please check your credentials.");
+    }
   };
 
   return (
@@ -80,16 +98,18 @@ export function LoginForm({
             <div className="flex flex-col gap-6">
               {/* Email Input */}
               <div className="grid gap-2">
-                <Label htmlFor="email" className="text-[#2C3E50]">Email</Label>
+                <Label htmlFor="username" className="text-[#2C3E50]">
+                  Name
+                </Label>
                 <Input
-                  id="email"
+                  id="username"
                   type="text"
-                  placeholder="you@example.com"
-                  value={formData.email}
+                  placeholder="Enter Your Name"
+                  value={formData.username}
                   onChange={handleChange}
                   className="bg-[#FAF3E0] border-[#8B5E3C]"
                 />
-                {errors.email && <p className="text-red-600 text-sm">{errors.email}</p>}
+                {errors.username && <p className="text-red-500 text-sm">{errors.username}</p>}
               </div>
 
               {/* Password Input */}

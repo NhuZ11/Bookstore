@@ -148,6 +148,7 @@ export function BookForm() {
           type="number"
           name="price"
           placeholder="Price"
+          min={0}
           value={book.price}
           onChange={handleChange}
           className="border p-2 rounded bg-[#FAF3E0] border-[#8B5E3C]"

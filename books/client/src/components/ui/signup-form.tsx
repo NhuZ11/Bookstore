@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useState } from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
@@ -13,13 +13,25 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
+import { register } from "@/app/utils/authService";
+
+interface UserData {
+  username: string;
+  email: string;
+  password: string;
+  name?: string; // Optional
+  address?: string; // Optional
+  phone?: string; // Optional
+  confirmPassword?: string;
+}
+
 export function SignupForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
   // State for form fields
   const [formData, setFormData] = useState({
-    name: "",
+    username: "",
     email: "",
     address: "",
     phone: "",
@@ -29,6 +41,8 @@ export function SignupForm({
 
   // State for errors
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  
+
 
   // Handle input changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,8 +54,8 @@ export function SignupForm({
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
 
-    if (!formData.name.trim()) newErrors.name = "Name is required";
-    else if (formData.name.length < 6 || formData.name.length > 20)
+    if (!formData.username.trim()) newErrors.name = "Name is required";
+    else if (formData.username.length < 6 || formData.username.length > 20)
       newErrors.name = "Name must be 6 to 20 characters long";
     if (!formData.email.trim()) newErrors.email = "Email is required";
     else if (!/\S+@\S+\.\S+/.test(formData.email))
@@ -66,10 +80,23 @@ export function SignupForm({
   };
 
   // Handle form submission
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (validateForm()) {
-      alert("Signup successful!");
+
+    // Validate form before submitting
+    if (!validateForm()) {
+      return;
+    }
+
+    try {
+    
+      // Register the user
+      await register(formData);
+      // Redirect to login page after successful registration
+      window.location.href = '/'
+    } catch (err) {
+      console.log("Registration failed", err);
+      // You can handle the error more explicitly, maybe show a message to the user
     }
   };
 
@@ -92,18 +119,20 @@ export function SignupForm({
             <div className="flex flex-col gap-6">
               {/* Name */}
               <div className="grid gap-2">
-                <Label htmlFor="name" className="text-[#2C3E50]">
+                <Label htmlFor="username" className="text-[#2C3E50]">
                   Name
                 </Label>
                 <Input
-                  id="name"
+                  id="username"
                   type="text"
                   placeholder="Enter Your Name"
-                  value={formData.name}
+                  value={formData.username}
                   onChange={handleChange}
                   className="bg-[#FAF3E0] border-[#8B5E3C]"
                 />
-                {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
+                {errors.name && (
+                  <p className="text-red-500 text-sm">{errors.name}</p>
+                )}
               </div>
 
               {/* Email */}
@@ -119,7 +148,9 @@ export function SignupForm({
                   onChange={handleChange}
                   className="bg-[#FAF3E0] border-[#8B5E3C]"
                 />
-                {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
+                {errors.email && (
+                  <p className="text-red-500 text-sm">{errors.email}</p>
+                )}
               </div>
 
               {/* Address */}
@@ -135,7 +166,9 @@ export function SignupForm({
                   onChange={handleChange}
                   className="bg-[#FAF3E0] border-[#8B5E3C]"
                 />
-                {errors.address && <p className="text-red-500 text-sm">{errors.address}</p>}
+                {errors.address && (
+                  <p className="text-red-500 text-sm">{errors.address}</p>
+                )}
               </div>
 
               {/* Phone Number */}
@@ -152,7 +185,9 @@ export function SignupForm({
                   onChange={handleChange}
                   className="bg-[#FAF3E0] border-[#8B5E3C]"
                 />
-                {errors.phone && <p className="text-red-500 text-sm">{errors.phone}</p>}
+                {errors.phone && (
+                  <p className="text-red-500 text-sm">{errors.phone}</p>
+                )}
               </div>
 
               {/* Password */}
@@ -187,7 +222,9 @@ export function SignupForm({
                   className="bg-[#FAF3E0] border-[#8B5E3C]"
                 />
                 {errors.confirmPassword && (
-                  <p className="text-red-500 text-sm">{errors.confirmPassword}</p>
+                  <p className="text-red-500 text-sm">
+                    {errors.confirmPassword}
+                  </p>
                 )}
               </div>
 
@@ -201,7 +238,10 @@ export function SignupForm({
             </div>
             <div className="mt-4 text-center text-sm text-[#4A4A4A]">
               Already have an account?{" "}
-              <Link href="/" className="underline underline-offset-4 text-[#8B5E3C]">
+              <Link
+                href="/"
+                className="underline underline-offset-4 text-[#8B5E3C]"
+              >
                 Login
               </Link>
             </div>
