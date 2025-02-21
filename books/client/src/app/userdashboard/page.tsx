@@ -1,5 +1,5 @@
-"use client"
-import { useState } from "react";
+"use client";
+import { useState, useEffect } from "react";
 import {
   Table,
   TableBody,
@@ -11,10 +11,11 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import axios from "axios";
 
 type Book = {
   id: string;
-  name: string;
+  book_name: string;
   genre: string;
   description: string;
   author: string;
@@ -22,56 +23,46 @@ type Book = {
   price?: number;
 };
 
-const books: Book[] = [
-  {
-    id: "1",
-    name: "English Book",
-    genre: "Study",
-    description: "hello hello",
-    author: "Ram",
-    year: 2000,
-    price: 500,
-  },
-  {
-    id: "2",
-    name: "Nepali Book",
-    genre: "Study",
-    description: "they are great",
-    author: "Shyam",
-    year: 2005,
-    price: 400,
-  },
-  {
-    id: "3",
-    name: "Math Book",
-    genre: "Education",
-    description: "hello hello",
-    author: "Hari",
-    year: 2010,
-    price: 350,
-  },
-  {
-    id: "4",
-    name: "Science Book",
-    genre: "Education",
-    description: "they are great",
-    author: "Gopal",
-    year: 2015,
-    price: 450,
-  },
-  {
-    id: "5",
-    name: "Social Book",
-    genre: "Education",
-    description: "they are great",
-    author: "Gopali",
-    year: 2015,
-    price: 450,
-  },
-];
+const API_LINK = "http://localhost:8000/books/";
 
 export default function UserDashboard() {
   const [selectedBook, setSelectedBook] = useState<Book | null>(null);
+  const [books, setBooks] = useState<
+    {
+      id: number;
+      book_name: string;
+      author: string;
+      genre: string;
+      year: string;
+      description: string;
+      price: number;
+    }[]
+  >([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState<Boolean>(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("access_token");
+    if (token) {
+      setIsAuthenticated(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    const fetchBooks = async () => {
+      try {
+        const response = await axios.get(API_LINK);
+        setBooks(response.data);
+      } catch (err) {
+        console.error("Error fetching books:", err);
+        setError("Failed to load books.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchBooks();
+  }, []);
 
   return (
     <div className="p-6 flex gap-6">
@@ -88,7 +79,6 @@ export default function UserDashboard() {
               <TableHead className="text-gray-700">Author</TableHead>
               <TableHead className="text-gray-700">Year</TableHead>
               <TableHead className="text-right text-gray-700">Price</TableHead>
-            
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -99,19 +89,20 @@ export default function UserDashboard() {
                 onClick={() => setSelectedBook(book)}
               >
                 <TableCell className="font-semibold text-gray-900">
-                  {book.name}
+                  {book.book_name}
                 </TableCell>
                 <TableCell>
-                  <Badge className="px-2 py-1 text-sm bg-[#9c5512]">{book.genre}</Badge>
+                  <Badge className="px-2 py-1 text-sm bg-[#9c5512]">
+                    {book.genre}
+                  </Badge>
                 </TableCell>
                 <TableCell className="text-gray-700">{book.author}</TableCell>
                 <TableCell className="text-gray-800">
                   {book.year ?? "N/A"}
                 </TableCell>
                 <TableCell className="text-right font-semibold text-gray-900">
-                  {book.price ? `$${book.price.toFixed(2)}` : "N/A"}
+                  {book.price ? `$${book.price}` : "N/A"}
                 </TableCell>
-             
               </TableRow>
             ))}
           </TableBody>
@@ -126,7 +117,7 @@ export default function UserDashboard() {
             <CardContent className="text-gray-600 space-y-2">
               <p>
                 <span className="font-semibold text-gray-900">Name: </span>
-                {selectedBook.name}
+                {selectedBook.book_name}
               </p>
               <p>
                 <span className="font-semibold text-gray-900">Genre: </span>
@@ -137,7 +128,9 @@ export default function UserDashboard() {
                 {selectedBook.author}
               </p>
               <p>
-                <span className="font-semibold text-gray-900">Description: </span>
+                <span className="font-semibold text-gray-900">
+                  Description:{" "}
+                </span>
                 {selectedBook.description}
               </p>
               <p>
@@ -146,11 +139,15 @@ export default function UserDashboard() {
               </p>
               <p>
                 <span className="font-semibold text-gray-900">Price: </span>
-                {selectedBook.price ? `$${selectedBook.price.toFixed(2)}` : "N/A"}
+                {selectedBook.price ? `$${selectedBook.price}` : "N/A"}
               </p>
-              <Button className="mt-4 w-full bg-green-500 hover:bg-green-600">
-                Add To Cart
-              </Button>
+              {isAuthenticated ? (
+                <Button className="mt-4 w-full bg-green-500 hover:bg-green-600">
+                  Add To Cart
+                </Button>
+              ) : (
+                <p className="bg-red-500 text-center p-1">Login First</p>
+              )}
             </CardContent>
           ) : (
             <CardContent className="text-gray-500">

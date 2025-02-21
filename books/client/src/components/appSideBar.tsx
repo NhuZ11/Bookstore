@@ -1,5 +1,5 @@
-import { Calendar, Home, Inbox, Search, Settings } from "lucide-react"
-
+"use client";
+import { Calendar, Home, Inbox, Search, Settings } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -9,7 +9,10 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
+import { useState, useEffect } from "react";
+import { logout } from "@/app/utils/authService";
+import Link from "next/link";
 
 // Menu items.
 const items = [
@@ -38,11 +41,20 @@ const items = [
     url: "#",
     icon: Settings,
   },
-]
+];
 
 export function AppSidebar() {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("access_token");
+    if (token) {
+      setIsAuthenticated(true);
+    }
+  }, []);
+
   return (
-    <Sidebar >
+    <Sidebar>
       <SidebarContent className="bg-[#c0b5b8]">
         <SidebarGroup>
           <SidebarGroupLabel>Application</SidebarGroupLabel>
@@ -58,10 +70,20 @@ export function AppSidebar() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+              {/* Move the logout/login check outside of the menu loop */}
+              <SidebarMenuItem>
+                {isAuthenticated ? (
+                  <SidebarMenuButton onClick={logout}>Logout</SidebarMenuButton>
+                ) : (
+                  <Link href="/">
+                  <span className="text-red-500 p-2">Please Login</span>
+                  </Link>
+                )}
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>
-  )
+  );
 }
