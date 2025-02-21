@@ -3,12 +3,19 @@
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import axios from "axios";
-import { validateBookForm } from "@/components/ui/form-validation"; // Import validation function
 
 const API_LINK = "http://localhost:8000/books";
 const genres = [
-  "Fiction", "Non-Fiction", "Mystery", "Science Fiction", "Fantasy",
-  "Romance", "Thriller", "Biography", "History", "Self-Help",
+  "Fiction",
+  "Non-Fiction",
+  "Mystery",
+  "Science Fiction",
+  "Fantasy",
+  "Romance",
+  "Thriller",
+  "Biography",
+  "History",
+  "Self-Help",
 ];
 
 interface Book {
@@ -34,58 +41,31 @@ export default function UpdateBook() {
     price: "",
   });
 
-  const [errors, setErrors] = useState<Record<string, string>>({});
   const [message, setMessage] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
 
+  // Fetch book details when component mounts
   useEffect(() => {
     if (!id) return;
 
     axios
-      .get(`${API_LINK}/${id}/`)
+      .get(`${API_LINK}/${id}/`) // Ensure the backend endpoint supports this
       .then((res) => setBook(res.data))
       .catch((err) => console.error("Error fetching book:", err));
   }, [id]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    const { name, value: rawValue } = e.target;
-    let value = rawValue;
   
-    // Trim input fields
-    if (name === "book_name" || name === "author" || name === "description") {
-      value = value.trim();
-    }
-  
-    if (name === "year") {
-      const currentYear = new Date().getFullYear();
-      const numericYear = parseInt(value, 10);
-  
-      // Prevent future years
-      if (!isNaN(numericYear) && numericYear > currentYear) {
-        return; // Ignore if future year is entered
-      }
-    }
-  
-    setBook({ ...book, [name]: value });
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+  ) => {
+    setBook({ ...book, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
-    setErrors({});
-    setMessage("");
-
-    const validationErrors = validateBookForm(book);
-    if (validationErrors) {
-      setErrors(validationErrors);
-      setIsLoading(false);
-      return;
-    }
-
     try {
       const updatedBook = {
         ...book,
-        year: Number(book.year),
+        year: Number(book.year), // Ensure number values are correctly formatted
         price: Number(book.price),
       };
 
@@ -95,8 +75,6 @@ export default function UpdateBook() {
     } catch (error) {
       setMessage("Failed to update book.");
       console.error(error);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -114,8 +92,7 @@ export default function UpdateBook() {
           className="border p-2 rounded"
           required
         />
-        {errors.book_name && <p className="text-red-500">{errors.book_name}</p>}
-
+        {/* Dropdown for Genre */}
         <select
           name="genre"
           value={book.genre}
@@ -125,11 +102,11 @@ export default function UpdateBook() {
         >
           <option value="">Select Genre</option>
           {genres.map((genre, index) => (
-            <option key={index} value={genre}>{genre}</option>
+            <option key={index} value={genre}>
+              {genre}
+            </option>
           ))}
         </select>
-        {errors.genre && <p className="text-red-500">{errors.genre}</p>}
-
         <input
           type="text"
           name="author"
@@ -139,8 +116,6 @@ export default function UpdateBook() {
           className="border p-2 rounded"
           required
         />
-        {errors.author && <p className="text-red-500">{errors.author}</p>}
-
         <input
           type="number"
           name="year"
@@ -150,8 +125,6 @@ export default function UpdateBook() {
           className="border p-2 rounded"
           required
         />
-        {errors.year && <p className="text-red-500">{errors.year}</p>}
-
         <textarea
           name="description"
           placeholder="Description"
@@ -160,8 +133,6 @@ export default function UpdateBook() {
           className="border p-2 rounded"
           required
         />
-        {errors.description && <p className="text-red-500">{errors.description}</p>}
-
         <input
           type="number"
           name="price"
@@ -171,10 +142,8 @@ export default function UpdateBook() {
           className="border p-2 rounded"
           required
         />
-        {errors.price && <p className="text-red-500">{errors.price}</p>}
-
-        <button type="submit" className="bg-blue-500 text-white p-2 rounded" disabled={isLoading}>
-          {isLoading ? "Updating..." : "Update Book"}
+        <button type="submit" className="bg-blue-500 text-white p-2 rounded">
+          Update Book
         </button>
       </form>
     </div>

@@ -86,3 +86,85 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+/* Media query for medium screens (Tablets and smaller) */
+@media (max-width: 1024px) {
+  .custom-card {
+    flex-direction: column;
+    padding: 1rem;
+  }
+
+  .custom-card-header {
+    padding: 1rem;
+    align-items: center;
+  }
+
+  .custom-flex-container {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .custom-card-title {
+    font-size: 3rem;
+    text-align: center;
+  }
+
+  .custom-card-content {
+    width: 100%;
+    text-align: center;
+  }
+
+  .custom-card-content-text {
+    font-size: 1.25rem;
+    text-align: center;
+  }
+
+  .custom-btn {
+    width: 8rem;
+    height: 3rem;
+  }
+}
+
+/* Media query for small screens (Phones) */
+@media (max-width: 640px) {
+  .custom-card {
+    flex-direction: column;
+    padding: 0.5rem;
+  }
+
+  .custom-card-header {
+    padding: 1rem;
+    align-items: center;
+  }
+
+  .custom-flex-container {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .custom-card-title {
+    font-size: 2rem;
+    text-align: center;
+  }
+
+  .custom-card-content {
+    width: 100%;
+    text-align: center;
+  }
+
+  .custom-card-content-text {
+    font-size: 1rem;
+    text-align: center;
+  }
+
+  .custom-btn {
+    width: 7rem;
+    height: 2.5rem;
+  }
+
+  /* Adjust image size for small screens */
+  .custom-flex-container img {
+    width: 200px;
+    height: 200px;
+  }
+}
