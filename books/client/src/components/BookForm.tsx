@@ -159,6 +159,7 @@ export function BookForm() {
             onChange={handleChange}
             className="border p-2 rounded bg-[#FAF3E0] border-[#8B5E3C] w-full"
             min="0"
+            max="10000"
           />
           {errors.price && <p className="text-red-500 text-sm">{errors.price}</p>}
         </div>
