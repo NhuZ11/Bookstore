@@ -90,8 +90,8 @@ export function BookForm() {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 border rounded-lg shadow-lg">
-      <h1 className="text-2xl font-bold mb-4">Add Book</h1>
+    <div className="max-w-md mx-auto">
+      <h1 className="text-2xl font-bold mb-4 text-[#2C3E50]">Add Book</h1>
       {message && <p className={`text-${message.includes("successfully") ? "green" : "red"}-500`}>{message}</p>}
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <input
@@ -100,7 +100,7 @@ export function BookForm() {
           placeholder="Book Title"
           value={book.book_name}
           onChange={handleChange}
-          className="border p-2 rounded"
+          className="border p-2 rounded bg-[#FAF3E0] border-[#8B5E3C]"
           required
         />
         {/* Dropdown for Genre */}
@@ -108,7 +108,7 @@ export function BookForm() {
           name="genre"
           value={book.genre}
           onChange={handleChange}
-          className="border p-2 rounded"
+          className="border p-2 rounded bg-[#FAF3E0] border-[#8B5E3C]"
           required
         >
           <option value="">Select Genre</option>
@@ -124,7 +124,7 @@ export function BookForm() {
           placeholder="Author"
           value={book.author}
           onChange={handleChange}
-          className="border p-2 rounded"
+          className="border p-2 rounded bg-[#FAF3E0] border-[#8B5E3C]"
           required
         />
         <input
@@ -133,7 +133,7 @@ export function BookForm() {
           placeholder="Year"
           value={book.year}
           onChange={handleChange}
-          className="border p-2 rounded"
+          className="border p-2 rounded bg-[#FAF3E0] border-[#8B5E3C]"
           required
         />
         <textarea
@@ -141,7 +141,7 @@ export function BookForm() {
           placeholder="Description"
           value={book.description}
           onChange={handleChange}
-          className="border p-2 rounded"
+          className="border p-2 rounded bg-[#FAF3E0] border-[#8B5E3C]"
           required
         />
         <input
@@ -150,12 +150,12 @@ export function BookForm() {
           placeholder="Price"
           value={book.price}
           onChange={handleChange}
-          className="border p-2 rounded"
+          className="border p-2 rounded bg-[#FAF3E0] border-[#8B5E3C]"
           required
         />
         <button
           type="submit"
-          className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600 disabled:bg-blue-300"
+          className="text-white p-2 rounded bg-[#8B5E3C] hover:bg-[#6D4C41] "
           disabled={isLoading}
         >
           {isLoading ? "Adding..." : "Add Book"}
