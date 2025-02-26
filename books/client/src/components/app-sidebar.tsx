@@ -11,6 +11,9 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar"
+import { useState, useEffect } from "react";
+import { logout } from "@/app/utils/authService";
+import Link from "next/link";
 
 // This is sample data.
 const data = {
@@ -34,6 +37,14 @@ const data = {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  
+    useEffect(() => {
+      const token = localStorage.getItem("access_token");
+      if (token) {
+        setIsAuthenticated(true);
+      }
+    }, []);
   return (
     <Sidebar {...props}>
       <SidebarHeader className="bg-[#c0b5b8] ">
@@ -47,11 +58,20 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               <SidebarMenu>
                 {item.items.map((item) => (
                   <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild isActive={item.isActive}>
+                    <SidebarMenuButton>
                       <a href={item.url}>{item.title}</a>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}
+                 <SidebarMenuItem>
+                {isAuthenticated ? (
+                  <SidebarMenuButton onClick={logout}>Logout</SidebarMenuButton>
+                ) : (
+                  <Link href="/">
+                  <span className="text-red-500 p-2">Please Login</span>
+                  </Link>
+                )}
+              </SidebarMenuItem>
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>

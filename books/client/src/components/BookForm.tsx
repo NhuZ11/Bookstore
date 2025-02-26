@@ -5,7 +5,6 @@ import axios from "axios";
 
 const API_URL = "http://localhost:8000/books/";
 
-
 const genres = [
   "Fiction",
   "Non-Fiction",
@@ -26,6 +25,7 @@ interface Book {
   year: number | string;
   description: string;
   price: number | string;
+  image?: File | null;
 }
 
 export function BookForm() {
@@ -36,6 +36,7 @@ export function BookForm() {
     year: "",
     description: "",
     price: "",
+    image: null,
   });
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -44,46 +45,39 @@ export function BookForm() {
     setBook({ ...book, [e.target.name]: e.target.value });
   };
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setBook({ ...book, image: e.target.files[0] });
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setMessage("");
 
-    // Convert year and price to numbers
-    const payload = {
-      ...book,
-      year: parseInt(book.year as string, 10),
-      price: parseFloat(book.price as string),
-    };
-
-    // Validate year and price
-    if (isNaN(payload.year)) {
-      setMessage("Please enter a valid year.");
-      setIsLoading(false);
-      return;
-    }
-    if (isNaN(payload.price)) {
-      setMessage("Please enter a valid price.");
-      setIsLoading(false);
-      return;
+    const formData = new FormData();
+    formData.append("book_name", book.book_name);
+    formData.append("genre", book.genre);
+    formData.append("author", book.author);
+    formData.append("year", book.year.toString());
+    formData.append("description", book.description);
+    formData.append("price", book.price.toString());
+    if (book.image) {
+      formData.append("image", book.image);
     }
 
     try {
-      const response = await axios.post(API_URL, payload, {
+      await axios.post(API_URL, formData, {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "multipart/form-data",
         },
       });
       setMessage("Book added successfully!");
-      setBook({ book_name: "", genre: "", author: "", year: "", description: "", price: "" }); // Reset form
+      setBook({ book_name: "", genre: "", author: "", year: "", description: "", price: "", image: null });
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        console.error("Error response:", error.response?.data); // Log the full error response
-        setMessage(error.response?.data?.message || "Failed to add book.");
-      } else {
-        console.error("Unexpected error:", error);
-        setMessage("An unexpected error occurred.");
-      }
+      console.error("Error adding book:", error);
+      setMessage("Failed to add book.");
     } finally {
       setIsLoading(false);
     }
@@ -103,7 +97,6 @@ export function BookForm() {
           className="border p-2 rounded bg-[#FAF3E0] border-[#8B5E3C]"
           required
         />
-        {/* Dropdown for Genre */}
         <select
           name="genre"
           value={book.genre}
@@ -154,9 +147,16 @@ export function BookForm() {
           className="border p-2 rounded bg-[#FAF3E0] border-[#8B5E3C]"
           required
         />
+        {/* Image Upload Input */}
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleImageChange}
+          className="border p-2 rounded bg-[#FAF3E0] border-[#8B5E3C]"
+        />
         <button
           type="submit"
-          className="text-white p-2 rounded bg-[#8B5E3C] hover:bg-[#6D4C41] "
+          className="text-white p-2 rounded bg-[#8B5E3C] hover:bg-[#6D4C41]"
           disabled={isLoading}
         >
           {isLoading ? "Adding..." : "Add Book"}
