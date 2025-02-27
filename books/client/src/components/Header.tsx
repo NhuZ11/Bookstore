@@ -8,15 +8,15 @@ const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <header className="bg-blue-600 text-white shadow-md">
+    <header className="bg-[#B08968] text-white shadow-md">
       <div className="container mx-auto flex items-center justify-between p-4">
         {/* Logo */}
-        <Link href="/" className="text-xl font-bold">
-          MyLogo
+        <Link href="/" className="text-2xl font-bold">
+          BookStore
         </Link>
 
         {/* Desktop Nav */}
-        <nav className="hidden md:flex gap-6">
+        <nav className="hidden md:flex gap-6 text-xl ">
           <Link href="/" className="hover:underline">
             Home
           </Link>

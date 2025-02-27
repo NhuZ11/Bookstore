@@ -25,11 +25,11 @@ const data = {
       items: [
         {
           title: "Home",
-          url: "#",
+          url: "/",
         },
         {
           title: "Books",
-          url: "#",
+          url: "/userdashboard",
         },
       ],
     },
@@ -47,25 +47,25 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     }, []);
   return (
     <Sidebar {...props}>
-      <SidebarHeader className="bg-[#c0b5b8] ">
+      <SidebarHeader className="bg-[#c7ac87]">
       </SidebarHeader >
-      <SidebarContent className="bg-[#c0b5b8] ">
+      <SidebarContent className="bg-[#c7ac87] ">
         {/* We create a SidebarGroup for each parent. */}
         {data.navMain.map((item) => (
           <SidebarGroup key={item.title}>
-            <SidebarGroupLabel>{item.title}</SidebarGroupLabel>
+            <SidebarGroupLabel className="text-2xl">{item.title}</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
                 {item.items.map((item) => (
                   <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton>
+                    <SidebarMenuButton className="text-xl">
                       <a href={item.url}>{item.title}</a>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}
-                 <SidebarMenuItem>
+                 <SidebarMenuItem >
                 {isAuthenticated ? (
-                  <SidebarMenuButton onClick={logout}>Logout</SidebarMenuButton>
+                  <SidebarMenuButton className="text-xl" onClick={logout}>Logout</SidebarMenuButton>
                 ) : (
                   <Link href="/">
                   <span className="text-red-500 p-2">Please Login</span>

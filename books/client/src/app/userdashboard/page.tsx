@@ -64,7 +64,7 @@ export default function UserDashboard() {
       <AppSidebar />
       <main className="flex flex-col w-full min-h-screen">
         <Header />
-        <div className="flex-1 flex flex-col md:flex-row gap-6 p-6">
+        <div className="flex-1 flex flex-col md:flex-row gap-6 p-6 bg-[#f7dcb7]">
           <div className="flex-1 overflow-x-auto">
             <h1 className="text-3xl font-bold text-center mb-6 text-gray-800">
               Available Book List
@@ -76,7 +76,7 @@ export default function UserDashboard() {
                   className="w-full"
                   onClick={() => setSelectedBook(book)}
                 >
-                  <Card className="shadow-xl rounded-lg overflow-hidden">
+                  <Card className="shadow-xl rounded-lg overflow-hidden bg-[#fceed9]">
                     {book.image ? (
                       <img
                         src={book.image}
