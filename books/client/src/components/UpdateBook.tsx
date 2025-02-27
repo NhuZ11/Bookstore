@@ -107,6 +107,7 @@ export default function UpdateBook({ id }: { id: number }) {
           "Content-Type": "multipart/form-data",
         },
       });
+      window.location.reload();
       toast.success("Book updated successfully!");
       setTimeout(() => router.refresh(), 1000); // Redirect after update
     } catch (error) {
@@ -122,29 +123,30 @@ export default function UpdateBook({ id }: { id: number }) {
       <DialogTrigger asChild>
         <Button variant="outline">Update</Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="bg-[#f3e4d0]">
         <DialogHeader>
           <DialogTitle>Update Book Details</DialogTitle>
           <DialogDescription>
             Please update the book details below and click "Update" to save your changes.
           </DialogDescription>
         </DialogHeader>
-        {message && <p className={`text-${message.includes("successfully") ? "green" : "red"}-500`}>{message}</p>}
-        <div className="flex flex-col gap-4">
+        {message && <div className={`text-${message.includes("successfully") ? "green" : "red"}-500`}>{message}</div>}
+        <div className="flex flex-col gap-4  ">
           <input
             type="text"
             name="book_name"
             placeholder="Book Title"
             value={book.book_name}
             onChange={handleChange}
-            className="border p-2 rounded"
+           
+            className="border p-2 rounded bg-[#FAF3E0] border-[#8B5E3C]"
             required
           />
           <select
             name="genre"
             value={book.genre}
             onChange={handleChange}
-            className="border p-2 rounded"
+            className="border p-2 rounded bg-[#FAF3E0] border-[#8B5E3C]"
             required
           >
             <option value="">Select Genre</option>
@@ -160,7 +162,7 @@ export default function UpdateBook({ id }: { id: number }) {
             placeholder="Author"
             value={book.author}
             onChange={handleChange}
-            className="border p-2 rounded"
+            className="border p-2 rounded bg-[#FAF3E0] border-[#8B5E3C]"
             required
           />
           <input
@@ -169,7 +171,7 @@ export default function UpdateBook({ id }: { id: number }) {
             placeholder="Year"
             value={book.year}
             onChange={handleChange}
-            className="border p-2 rounded"
+            className="border p-2 rounded bg-[#FAF3E0] border-[#8B5E3C]"
             required
           />
           <textarea
@@ -177,7 +179,7 @@ export default function UpdateBook({ id }: { id: number }) {
             placeholder="Description"
             value={book.description}
             onChange={handleChange}
-            className="border p-2 rounded"
+            className="border p-2 rounded bg-[#FAF3E0] border-[#8B5E3C]"
             required
           />
           <input
@@ -187,18 +189,18 @@ export default function UpdateBook({ id }: { id: number }) {
             min={0}
             value={book.price}
             onChange={handleChange}
-            className="border p-2 rounded"
+            className="border p-2 rounded bg-[#FAF3E0] border-[#8B5E3C]"
             required
           />
           <input
             type="file"
             accept="image/*"
             onChange={handleImageChange}
-            className="border p-2 rounded"
+            className="border p-2 rounded bg-[#FAF3E0] border-[#8B5E3C]"
           />
         </div>
         <div className="flex justify-end gap-2 mt-4">
-          <Button variant="outline">Cancel</Button>
+          <Button variant="outline" onClick={()=>{router.push('/dashboard')}}>Cancel</Button>
           <Button
             className="bg-blue-500 text-white"
             onClick={handleSubmit}

@@ -106,13 +106,13 @@ export default function UserDashboard() {
           {/* Dialog for Book Details */}
           <Dialog open={!!selectedBook} onOpenChange={(open) => !open && setSelectedBook(null)}>
             <DialogTrigger />
-            <DialogContent className="w-full md:w-[350px] p-6 mt-6 md:mt-0">
+            <DialogContent className="w-full md:w-[350px] p-6 mt-6 md:mt-0 bg-[#f3e4d0]">
               <DialogHeader>
                 <DialogTitle>Book Details</DialogTitle>
               </DialogHeader>
               <DialogDescription>
                 {selectedBook ? (
-                  <div className="space-y-2 text-gray-600">
+                  <div className="space-y-2 text-gray-600 ">
                     <div>
                     {selectedBook.image ? (
                       <img

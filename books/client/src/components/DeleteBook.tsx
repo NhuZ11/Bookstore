@@ -25,6 +25,7 @@ export default function DeleteBook({ id }: { id: number }) {
     try {
       setLoading(true);
       await axios.delete(`${API_LINK}/${id}/delete/`);
+      window.location.reload();
       toast.success("Book deleted successfully!");
       setTimeout(() => router.refresh(), 1000); // Refresh page after deletion
     } catch (error) {
@@ -40,7 +41,7 @@ export default function DeleteBook({ id }: { id: number }) {
       <DialogTrigger asChild>
         <Button variant="destructive">Delete</Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="bg-[#f3e4d0]">
         <DialogHeader>
           <DialogTitle>Confirm Deletion</DialogTitle>
           <DialogDescription>
@@ -48,7 +49,7 @@ export default function DeleteBook({ id }: { id: number }) {
           </DialogDescription>
         </DialogHeader>
         <div className="flex justify-end gap-2 mt-4">
-          <Button variant="outline">Cancel</Button>
+          <Button variant="outline" onClick={()=>{router.push('/dashboard')}}>Cancel</Button>
           <Button
             className="bg-red-500 text-white"
             onClick={handleDelete}
