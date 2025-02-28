@@ -37,7 +37,7 @@ export function SignupForm({
       const newErrors: { [key: string]: string } = {};
   
       if (!formData.username.trim()) newErrors.name = "Name is required";
-      else if (formData.username.length < 6 || formData.username.length > 20)
+      else if (formData.username.length < 2 || formData.username.length > 20)
         newErrors.name = "Name must be 6 to 20 characters long";
       if (!formData.email.trim()) newErrors.email = "Email is required";
       else if (!/\S+@\S+\.\S+/.test(formData.email))

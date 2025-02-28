@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AppSidebar } from "@/components/app-sidebar";
 import Image from "next/image";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
@@ -13,12 +13,21 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { BookForm } from "@/components/BookForm";
 import { BookTable } from "@/components/BookTable";
 import axios from 'axios';
+import { useRouter } from "next/router";
 
 const API_LINK = "http://localhost:8000/books/";
 
 export default function Page() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+
+
+  useEffect(() => {
+    const role = localStorage.getItem("role");
+    if (role !== "Admin") {
+      window.location.href = '/unauthorized' // Redirect unauthorized users
+    }
+  }, []);
 
   const handleSubmit = async (data: any) => {
     setLoading(true);
@@ -57,14 +66,14 @@ export default function Page() {
             </header>
 
             {/* Main Content Section */}
-            <div className="bg-[#f1eae0]">
+            <div className="bg-[#f5e8d5]">
             <div className="pt-10 px-10 ">
               <Card className="flex-start size-auto w-auto bg-[#EDE0D4]">
                 <CardHeader className="flex flex-col items-center">
                   <div className="flex gap-40">
                     <CardTitle className="italic text-6xl">
                       Upload Your Books <br /> To Increase Your Sales
-                    </CardTitle>
+                    </CardTitle>  
                     <CardContent>
                       <p className="text-2xl">
                         Engage your shop books with this Dashboard <br /> and make sales every day to your shop

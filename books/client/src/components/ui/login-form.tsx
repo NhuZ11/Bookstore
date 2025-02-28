@@ -46,12 +46,27 @@ export function LoginForm({
       return;
     }
 
+    // try {
+    //   // Call the login function from the auth service
+    //   await login(formData);
+    //   window.location.href = '/userdashboard'; // Redirect on successful login
+    // } catch (err) {
+    //   console.error('Invalid username or password');
+    //   alert("Login failed, please check your credentials.");
+    // }
+
+
     try {
-      // Call the login function from the auth service
-      await login(formData);
-      window.location.href = '/userdashboard'; // Redirect on successful login
+      const role = await login(formData); // Get role from backend
+      
+      // Redirect based on role
+      if (role === "Admin") {
+        window.location.href = "/dashboard";
+      } else {
+        window.location.href = "/userdashboard";
+      }
     } catch (err) {
-      console.error('Invalid username or password');
+      console.error("Invalid username or password");
       alert("Login failed, please check your credentials.");
     }
   };
